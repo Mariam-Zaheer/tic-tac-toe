@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tic-tac-toe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: rgb(10, 10, 10);
+            text-align: center;
+            color: white;
+        }
+        .container {
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8.5px;
+        }
+        .game {
+            height: 60vmin;
+            width: 60vmin;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12.5px;
+        }
+        .box {
+            height: 18vmin;
+            width: 18vmin;
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+            font-size: 8vmin;
+            color: white;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1> Tic-Tac-Toe</h1>
+        
+        <div class="container" id="board">
+            <div class="game"></div>
+        </div>
+        <button onclick="resetBoard()">Reset Game</button>
+
+        <script>
+            const gameBoard = document.querySelector('.game');
+            let turn = 'X';
+
+            const cells = [];
+
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'box';
+                cell.addEventListener('click', () => {
+                    if (!cell.textContent) {
+                        cell.textContent = turn;
+                        turn = turn === 'X' ? 'O' : 'X';
+                        checkWin();
+                    }
+                });
+                gameBoard.appendChild(cell);
+                cells.push(cell);
+            }
+
+            function checkWin() {
+                const winningCombos = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                    [0, 4, 8], [2, 4, 6] // diagonals
+                ];
+
+                for (const combo of winningCombos) {
+                    const [a, b, c] = combo;
+                    if (cells[a].textContent && cells[a].textContent === cells[b].textContent && cells[a].textContent === cells[c].textContent) {
+                        alert(`${cells[a].textContent} wins!`);
+                        resetBoard();
+                        return;
+                    }
+                }
+
+                if (!cells.some(cell => !cell.textContent)) {
+                    alert('It\'s a draw!');
+                    resetBoard();
+                }
+            }
+
+            function resetBoard() {
+                turn = 'X';
+                cells.forEach(cell => {
+                    cell.textContent = '';
+                });
+            }
+        </script>
+    </main>
+</body>
+</html>
